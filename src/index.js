@@ -1,3 +1,5 @@
+import weather from './weather.js';
+
 function helloWorld() {
   const div = document.createElement('div')
 
@@ -7,3 +9,6 @@ function helloWorld() {
 }
 
 helloWorld();
+
+const object = await weather.getWeather();
+console.log(object.city);
