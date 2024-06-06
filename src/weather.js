@@ -1,25 +1,46 @@
 const weather = (() => {
   const apiKey = '100612ab215844a98f3194538240306';
+  const daysOfForecast = '3'; // 3 days is the limit of WeatherAPI free tier
   let zipCode = '11726';
 
   const getResponseJson = async () => {
-    const url = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${zipCode}`;
-    const response = await fetch(url);
+    const currentURL = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${zipCode}&days=${daysOfForecast}`;
+    const response = await fetch(currentURL);
     const weatherData = await response.json();
 
     console.log(weatherData);
     return weatherData;
   }
 
+  const createDay = (someObject) => {
+    const day = {
+      date: someObject.date,
+      maxtemp_c: someObject.day.maxtemp_c,
+      maxtemp_f: someObject.day.maxtemp_f,
+      mintemp_c: someObject.day.mintemp_c,
+      mintemp_f: someObject.day.mintemp_f,
+      avgtemp_c: someObject.day.avgtemp_c,
+      avgtemp_f: someObject.day.avgtemp_f,
+      condition: someObject.day.condition.text,
+    }
+
+    return day;
+  }
+
   const processJson = (someJson) => {
-    const city = someJson.location.name;
-    const state = someJson.location.region;
-    const timeDate = someJson.location.localtime;
+    const forecastday = someJson.forecast.forecastday;
+    const name = someJson.location.name;
+    const region = someJson.location.region;
+    const week = {};
+
+    for (const dayNum in forecastday) {
+      week[dayNum] = createDay(forecastday[dayNum]);
+    }
 
     return {
-      city,
-      state,
-      timeDate,
+      name,
+      region,
+      week,
     }
   }
 

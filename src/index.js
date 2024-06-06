@@ -11,4 +11,4 @@ function helloWorld() {
 helloWorld();
 
 const object = await weather.getWeather();
-console.log(object.city);
+console.log(object);
