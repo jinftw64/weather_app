@@ -1,14 +1,5 @@
 import weather from './weather.js';
+import dom from './dom.js';
 
-function helloWorld() {
-  const div = document.createElement('div')
-
-  div.textContent = 'Hello world!';
-
-  document.body.appendChild(div);
-}
-
-helloWorld();
-
-const object = await weather.getWeather();
-console.log(object);
+dom.renderForm();
+dom.eventHandlers();

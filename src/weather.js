@@ -1,10 +1,8 @@
-const weather = (() => {
-  const apiKey = '100612ab215844a98f3194538240306';
-  const daysOfForecast = '3'; // 3 days is the limit of WeatherAPI free tier
-  let zipCode = '11726';
+import config from "./config";
 
+const weather = (() => {
   const getResponseJson = async () => {
-    const currentURL = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${zipCode}&days=${daysOfForecast}`;
+    const currentURL = `https://api.weatherapi.com/v1/forecast.json?key=${config.apiKey}&q=${config.zipCode}&days=${config.daysOfForecast}`;
     const response = await fetch(currentURL);
     const weatherData = await response.json();
 
