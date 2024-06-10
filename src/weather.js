@@ -27,6 +27,7 @@ const weather = (() => {
       mintemp_c: someObject.forecast.forecastday[0].day.mintemp_c,
       mintemp_f: someObject.forecast.forecastday[0].day.mintemp_f,
       condition: someObject.current.condition.text,
+      code: someObject.current.condition.code,
     }
 
     return now;
@@ -42,6 +43,7 @@ const weather = (() => {
       avgtemp_c: someObject.day.avgtemp_c,
       avgtemp_f: someObject.day.avgtemp_f,
       condition: someObject.day.condition.text,
+      code: someObject.day.condition.code,
     }
 
     return day;

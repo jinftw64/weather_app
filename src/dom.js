@@ -52,6 +52,7 @@ const dom = (() => {
 
     const temp = document.querySelector('.now .temp');
 
+    // test code here
     temp.textContent = someObject.week[0].temp_f;
   }
 
