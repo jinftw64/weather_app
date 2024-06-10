@@ -1,5 +1,6 @@
 import config from './config.js';
 import weather from './weather.js';
+import handlers from './handlers.js';
 
 import formTemplate from './templates/form.html';
 import locationBar from './templates/location-bar.html'
@@ -17,24 +18,6 @@ const dom = (() => {
     container.appendChild(form);
   }
 
-  const eventHandlers = () => {
-    const renderedForm = document.querySelector('form.zip-code-form');
-    const zipField = document.querySelector('#zip');
-    const unitOfMeasurement = document.querySelector('input[name="unit-of-measurement"]:checked');
-
-    renderedForm.addEventListener('submit', async (event) => {
-      event.preventDefault();
-
-      config.zipCode = zipField.value;
-      config.unitOfMeasurement = unitOfMeasurement.value;
-
-      const weatherData = await weather.getWeather();
-
-      resetDOM();
-      renderLocationBar(weatherData);
-    })
-  }
-
   const resetDOM = () => {
     while (container.firstChild) {
       container.removeChild(container.lastChild);
@@ -43,8 +26,7 @@ const dom = (() => {
 
   const renderLocationBar = (someObject) => {
     const locationDiv = document.createElement('div');
-    const city = someObject.name;
-    const region = someObject.region;
+    config.cityRegion = `${someObject.name}, ${someObject.region}`;
 
     locationDiv.innerHTML = locationBar;
 
@@ -52,8 +34,9 @@ const dom = (() => {
 
     const locationInput = document.querySelector('#location');
 
-    locationInput.setAttribute('onfocus', 'this.value=""');
-    locationInput.value = `${city}, ${region}`;
+    locationInput.value = config.cityRegion;
+
+    handlers.setLocationBar();
   }
 
   const renderNow = () => {
@@ -62,7 +45,7 @@ const dom = (() => {
 
   return {
     renderForm,
-    eventHandlers,
+    renderLocationBar,
     resetDOM,
   }
 })();
