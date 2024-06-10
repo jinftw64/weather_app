@@ -1,9 +1,9 @@
 import config from './config.js';
-import weather from './weather.js';
 import handlers from './handlers.js';
 
 import formTemplate from './templates/form.html';
 import locationBar from './templates/location-bar.html'
+import now from './templates/now.html';
 import './style.css';
 
 const dom = (() => {
@@ -12,7 +12,6 @@ const dom = (() => {
   const renderForm = () => {
     const form = document.createElement('form');
     form.className = 'zip-code-form';
-
     form.innerHTML = formTemplate;
 
     container.appendChild(form);
@@ -26,6 +25,9 @@ const dom = (() => {
 
   const renderLocationBar = (someObject) => {
     const locationDiv = document.createElement('div');
+
+    locationDiv.classList.add('location-bar', 'panel');
+
     config.cityRegion = `${someObject.name}, ${someObject.region}`;
 
     locationDiv.innerHTML = locationBar;
@@ -39,14 +41,25 @@ const dom = (() => {
     handlers.setLocationBar();
   }
 
-  const renderNow = () => {
+  const renderNow = (someObject) => {
+    const nowDiv = document.createElement('div');
 
+    nowDiv.classList.add('panel', 'now');
+
+    nowDiv.innerHTML = now;
+
+    container.appendChild(nowDiv);
+
+    const temp = document.querySelector('.now .temp');
+
+    temp.textContent = someObject.week[0].temp_f;
   }
 
   return {
     renderForm,
     renderLocationBar,
     resetDOM,
+    renderNow,
   }
 })();
 

@@ -19,6 +19,7 @@ const handlers = (() => {
 
       dom.resetDOM();
       dom.renderLocationBar(weatherData);
+      dom.renderNow(weatherData);
     })
   }
 
