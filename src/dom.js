@@ -1,5 +1,6 @@
 import config from './config.js';
 import handlers from './handlers.js';
+import imageMap from './imageMap.js';
 
 import formTemplate from './templates/form.html';
 import locationBar from './templates/location-bar.html'
@@ -51,9 +52,18 @@ const dom = (() => {
     container.appendChild(nowDiv);
 
     const temp = document.querySelector('.now .temp');
+    const icon = document.querySelector('.now .icon');
 
     // test code here
     temp.textContent = someObject.week[0].temp_f;
+    icon.src = getNowIcon(someObject.isDay, someObject.week[0].code);
+  }
+
+  const getNowIcon = (boolean, code) => {
+    const nowIconPath = boolean ? imageMap[code].day.icon : imageMap[code].night.icon
+    const image = require(nowIconPath);
+
+    return image;
   }
 
   return {

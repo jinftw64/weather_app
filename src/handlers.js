@@ -17,6 +17,8 @@ const handlers = (() => {
 
       const weatherData = await weather.getWeather();
 
+      console.log(weatherData);
+
       dom.resetDOM();
       dom.renderLocationBar(weatherData);
       dom.renderNow(weatherData);

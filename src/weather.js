@@ -53,6 +53,8 @@ const weather = (() => {
     const forecastday = someJson.forecast.forecastday;
     const name = someJson.location.name;
     const region = someJson.location.region;
+    const localtime_epoch = someJson.location.localtime_epoch;
+    const isDay = isDaytime(localtime_epoch);
     const week = {};
 
     for (const dayNum in forecastday) {
@@ -67,8 +69,16 @@ const weather = (() => {
     return {
       name,
       region,
+      localtime_epoch,
+      isDay,
       week,
     }
+  }
+
+  const isDaytime = (epoch) => {
+    const hours = new Date(epoch).getHours();
+
+    return (hours > 6 && hours < 20);
   }
 
   const getWeather = async () => {

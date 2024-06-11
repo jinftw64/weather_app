@@ -12,7 +12,7 @@ const imageMap = {
 
   1003: {
     day: {
-      icon: './icons/partly_cloudy_day.svg.svg',
+      icon: './icons/partly_cloudy_day.svg',
       banner_folder: './banners/03-partly-cloudy-day/'
     },
     night: {
@@ -538,3 +538,5 @@ const imageMap = {
     }
   },
 }
+
+export default imageMap;
