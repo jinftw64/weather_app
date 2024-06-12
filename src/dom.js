@@ -53,12 +53,23 @@ const dom = (() => {
     container.appendChild(nowDiv);
 
     const temp = document.querySelector('.now .temp');
+    const highTemp = document.querySelector('.now .high');
+    const lowTemp = document.querySelector('.now .low');
+    const feelsLike = document.querySelector('.now .feels-like');
+    const condition = document.querySelector('.now .condition');
     const icon = document.querySelector('.now .icon');
 
     // test code here
-    temp.textContent = someObject.week[0].temp_f;
     const iconName = getIconName(someObject.isDay, someObject.week[0].code)
     lazyLoadImage(iconName, icon);
+
+    if (config.unitOfMeasurement === 'fahrenheit') {
+      temp.textContent = someObject.week[0].temp_f;
+      highTemp.textContent = someObject.week[0].maxtemp_f;
+      lowTemp.textContent = someObject.week[0].mintemp_f;
+      feelsLike.textContent = someObject.week[0].feelslike_f;
+      condition.textContent = someObject.week[0].condition;
+    }
   }
 
   const getIconName = (boolean, code) => {
