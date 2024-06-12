@@ -6,17 +6,18 @@ const handlers = (() => {
   const setForm = () => {
     const renderedForm = document.querySelector('form.zip-code-form');
     const zipField = document.querySelector('#zip');
-    const unitOfMeasurement = document.querySelector('input[name="unit-of-measurement"]:checked');
-
 
     renderedForm.addEventListener('submit', async (event) => {
       event.preventDefault();
+
+      const unitOfMeasurement = document.querySelector('input[name="unit-of-measurement"]:checked');
 
       config.zipCode = zipField.value;
       config.unitOfMeasurement = unitOfMeasurement.value;
 
       const weatherData = await weather.getWeather();
 
+      // test code
       console.log(weatherData);
       console.log(config.unitOfMeasurement);
 

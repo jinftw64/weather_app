@@ -6,6 +6,7 @@ import lazyLoadImage from './lazyLoadImage.js';
 import formTemplate from './templates/form.html';
 import locationBar from './templates/location-bar.html'
 import now from './templates/now.html';
+import hour from './templates/hour.html';
 import './style.css';
 
 const dom = (() => {
@@ -29,12 +30,10 @@ const dom = (() => {
     const locationDiv = document.createElement('div');
 
     locationDiv.classList.add('location-bar', 'panel');
+    locationDiv.innerHTML = locationBar;
+    container.appendChild(locationDiv);
 
     config.cityRegion = `${someObject.name}, ${someObject.region}`;
-
-    locationDiv.innerHTML = locationBar;
-
-    container.appendChild(locationDiv);
 
     const locationInput = document.querySelector('#location');
 
@@ -44,10 +43,10 @@ const dom = (() => {
   }
 
   const renderNow = (someObject) => {
+    // create now div and render
     const nowDiv = document.createElement('div');
 
     nowDiv.classList.add('panel', 'now');
-
     nowDiv.innerHTML = now;
 
     container.appendChild(nowDiv);
@@ -59,16 +58,23 @@ const dom = (() => {
     const condition = document.querySelector('.now .condition');
     const icon = document.querySelector('.now .icon');
 
-    // test code here
+    // lookup code and render icon
     const iconName = getIconName(someObject.isDay, someObject.week[0].code)
     lazyLoadImage(iconName, icon);
+
+    // set api response values to elements
+    condition.textContent = someObject.week[0].condition;
 
     if (config.unitOfMeasurement === 'fahrenheit') {
       temp.textContent = someObject.week[0].temp_f;
       highTemp.textContent = someObject.week[0].maxtemp_f;
       lowTemp.textContent = someObject.week[0].mintemp_f;
       feelsLike.textContent = someObject.week[0].feelslike_f;
-      condition.textContent = someObject.week[0].condition;
+    } else if (config.unitOfMeasurement === 'celsius') {
+      temp.textContent = someObject.week[0].temp_c;
+      highTemp.textContent = someObject.week[0].maxtemp_c;
+      lowTemp.textContent = someObject.week[0].mintemp_c;
+      feelsLike.textContent = someObject.week[0].feelslike_c;
     }
   }
 
@@ -76,6 +82,13 @@ const dom = (() => {
     const iconName = boolean ? imageMap[code].day.icon : imageMap[code].night.icon
 
     return iconName;
+  }
+
+  const renderHour = (someDayObject) => {
+    const hourDiv = document.createElement('div');
+
+    hourDiv.classList.add('hour');
+    hourDiv.innerHTML = hour;
   }
 
   return {

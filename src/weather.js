@@ -49,6 +49,17 @@ const weather = (() => {
     return day;
   }
 
+  const createAllHours = (hourArray) => {
+    const allHours = [];
+
+    for (const hour of hourArray) {
+      // complete this block 
+      // allHours is an array of objects
+      // push an object for every loop
+      allHours.push()
+    }
+  }
+
   const processJson = (someJson) => {
     const forecastday = someJson.forecast.forecastday;
     const name = someJson.location.name;
