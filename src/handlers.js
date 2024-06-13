@@ -24,6 +24,8 @@ const handlers = (() => {
       dom.resetDOM();
       dom.renderLocationBar(weatherData);
       dom.renderNow(weatherData);
+      console.log(weatherData.week[0].hours)
+      // dom.renderHourly(weatherData.week[0].hours)
     })
   }
 

@@ -123,6 +123,7 @@ const weather = (() => {
 
   return {
     getWeather,
+    epochToEST,
   }
 })();
 

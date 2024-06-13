@@ -1,4 +1,5 @@
 import config from './config.js';
+import weather from './weather.js';
 import handlers from './handlers.js';
 import imageMap from './imageMap.js';
 import lazyLoadImage from './lazyLoadImage.js';
@@ -6,7 +7,7 @@ import lazyLoadImage from './lazyLoadImage.js';
 import formTemplate from './templates/form.html';
 import locationBar from './templates/location-bar.html'
 import now from './templates/now.html';
-import hour from './templates/hour.html';
+import hourHTML from './templates/hour.html';
 import './style.css';
 
 const dom = (() => {
@@ -84,11 +85,41 @@ const dom = (() => {
     return iconName;
   }
 
-  const renderHour = (someDayObject) => {
+  const renderHour = (someHourObject, willbeDayBool) => {
     const hourDiv = document.createElement('div');
 
     hourDiv.classList.add('hour');
-    hourDiv.innerHTML = hour;
+    hourDiv.innerHTML = hourHTML;
+
+    const tempDiv = document.querySelector('.hour .temp');
+    const iconDiv = document.querySelector('.hour .icon');
+    const timeDiv = document.querySelector('.hour .time-in-hour');
+
+    if (config.unitOfMeasurement === 'fahrenheit') {
+      tempDiv.innerText = someHourObject.temp_f;
+    } else if (config.unitOfMeasurement === 'celsius') {
+      tempDiv.innerText = someHourObject.temp_c;
+    }
+
+    const iconName = getIconName(willbeDayBool, someHourObject.code)
+    lazyLoadImage(iconName, iconDiv);
+
+    timeDiv.innerText = weather.epochToEST(someHourObject.time_epoch);
+
+    return hourDiv;
+  }
+
+  const renderHourly = (someHourArray) => {
+    const hourlyDiv = document.createElement('div');
+
+    hourlyDiv.classList.add('panel', 'hourly');
+
+    for (const someHourObject of someHourArray) {
+      const currentHourDiv = renderHour(someHourObject);
+      hourlyDiv.appendChild(currentHourDiv);
+    }
+
+    container.appendChild(hourlyDiv);
   }
 
   return {
@@ -96,6 +127,7 @@ const dom = (() => {
     renderLocationBar,
     resetDOM,
     renderNow,
+    renderHourly,
   }
 })();
 
