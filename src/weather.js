@@ -11,7 +11,12 @@ const weather = (() => {
     const weatherData = await response.json();
 
     console.log(weatherData);
+    config.lastUpdatedEpoch = weatherData.current.last_updated_epoch;
     return weatherData;
+  }
+
+  const epochToEST = (epochNumber) => {
+    return (epochNumber % 86400 / 3600) - 4;
   }
 
   // current day requires different deserialization vs forecast day
@@ -28,6 +33,7 @@ const weather = (() => {
       mintemp_f: someObject.forecast.forecastday[0].day.mintemp_f,
       condition: someObject.current.condition.text,
       code: someObject.current.condition.code,
+      hours: getFutureHours(config.lastUpdatedEpoch, someObject.forecast.forecastday[0].hour, config.hoursToDisplay)
     }
 
     return now;
@@ -44,20 +50,37 @@ const weather = (() => {
       avgtemp_f: someObject.day.avgtemp_f,
       condition: someObject.day.condition.text,
       code: someObject.day.condition.code,
+      hours: getFutureHours(config.lastUpdatedEpoch, someObject.hour, config.hoursToDisplay)
     }
 
     return day;
   }
 
-  const createAllHours = (hourArray) => {
+  const getFutureHours = (epochTime, responseHourArray, hoursToDisplay) => {
+    const currentTimein24hr = Math.ceil(epochToEST(epochTime));
+    const endTimein24hr = currentTimein24hr + hoursToDisplay;
+
+    const slicedHourArray = responseHourArray.slice(currentTimein24hr, endTimein24hr);
+
     const allHours = [];
 
-    for (const hour of hourArray) {
-      // complete this block 
-      // allHours is an array of objects
-      // push an object for every loop
-      allHours.push()
+    const createHour = (someHour) => {
+      const newHour = {};
+
+      newHour.time_epoch = someHour.time_epoch;
+      newHour.temp_c = someHour.temp_c;
+      newHour.temp_f = someHour.temp_f;
+      newHour.code = someHour.condition.code;
+
+      return newHour;
     }
+
+    for (const currentHour of slicedHourArray) {
+      const hour = createHour(currentHour);
+      allHours.push(hour);
+    }
+
+    return allHours;
   }
 
   const processJson = (someJson) => {
