@@ -68,9 +68,9 @@ const dom = (() => {
 
     if (config.unitOfMeasurement === 'fahrenheit') {
       temp.textContent = someObject.week[0].temp_f;
-      highTemp.textContent = someObject.week[0].maxtemp_f;
-      lowTemp.textContent = someObject.week[0].mintemp_f;
-      feelsLike.textContent = someObject.week[0].feelslike_f;
+      highTemp.textContent = `High: ${someObject.week[0].maxtemp_f}`;
+      lowTemp.textContent = `Low: ${someObject.week[0].mintemp_f}`;
+      feelsLike.textContent = `Feels like ${someObject.week[0].feelslike_f}`;
     } else if (config.unitOfMeasurement === 'celsius') {
       temp.textContent = someObject.week[0].temp_c;
       highTemp.textContent = someObject.week[0].maxtemp_c;
@@ -85,26 +85,11 @@ const dom = (() => {
     return iconName;
   }
 
-  const renderHour = (someHourObject, willbeDayBool) => {
+  const renderHour = () => {
     const hourDiv = document.createElement('div');
 
     hourDiv.classList.add('hour');
     hourDiv.innerHTML = hourHTML;
-
-    const tempDiv = document.querySelector('.hour .temp');
-    const iconDiv = document.querySelector('.hour .icon');
-    const timeDiv = document.querySelector('.hour .time-in-hour');
-
-    if (config.unitOfMeasurement === 'fahrenheit') {
-      tempDiv.innerText = someHourObject.temp_f;
-    } else if (config.unitOfMeasurement === 'celsius') {
-      tempDiv.innerText = someHourObject.temp_c;
-    }
-
-    const iconName = getIconName(willbeDayBool, someHourObject.code)
-    lazyLoadImage(iconName, iconDiv);
-
-    timeDiv.innerText = weather.epochToEST(someHourObject.time_epoch);
 
     return hourDiv;
   }
@@ -114,12 +99,31 @@ const dom = (() => {
 
     hourlyDiv.classList.add('panel', 'hourly');
 
-    for (const someHourObject of someHourArray) {
-      const currentHourDiv = renderHour(someHourObject);
-      hourlyDiv.appendChild(currentHourDiv);
-    }
-
     container.appendChild(hourlyDiv);
+
+    for (let i = 0; i < someHourArray.length; i++) {
+      const someHourObject = someHourArray[i];
+      const currentHourDiv = renderHour();
+
+      hourlyDiv.appendChild(currentHourDiv);
+
+      const tempDiv = currentHourDiv.getElementsByClassName('temp')[0];
+      const iconDiv = currentHourDiv.getElementsByClassName('icon')[0];
+      const timeDiv = currentHourDiv.getElementsByClassName('time-in-hour')[0];
+
+      if (config.unitOfMeasurement === 'fahrenheit') {
+        tempDiv.innerText = someHourObject.temp_f;
+      } else if (config.unitOfMeasurement === 'celsius') {
+        tempDiv.innerText = someHourObject.temp_c;
+      }
+
+      const isCurrentHourDaytime = weather.isDaytime(someHourObject.time_epoch);
+
+      const iconName = getIconName(isCurrentHourDaytime, someHourObject.code)
+      lazyLoadImage(iconName, iconDiv);
+
+      timeDiv.innerText = weather.epochToEST(someHourObject.time_epoch);
+    }
   }
 
   return {

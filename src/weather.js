@@ -124,6 +124,7 @@ const weather = (() => {
   return {
     getWeather,
     epochToEST,
+    isDaytime,
   }
 })();
 
