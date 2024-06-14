@@ -2,7 +2,7 @@ import config from './config.js';
 import weather from './weather.js';
 import handlers from './handlers.js';
 import imageMap from './imageMap.js';
-import lazyLoadImage from './lazyLoadImage.js';
+import lazyLoad from './lazyLoadImage.js';
 
 import formTemplate from './templates/form.html';
 import locationBar from './templates/location-bar.html'
@@ -61,21 +61,21 @@ const dom = (() => {
 
     // lookup code and render icon
     const iconName = getIconName(someObject.isDay, someObject.week[0].code)
-    lazyLoadImage(iconName, icon);
+    lazyLoad.getImage(iconName, icon);
 
     // set api response values to elements
     condition.textContent = someObject.week[0].condition;
 
     if (config.unitOfMeasurement === 'fahrenheit') {
-      temp.textContent = someObject.week[0].temp_f;
-      highTemp.textContent = `High: ${someObject.week[0].maxtemp_f}`;
-      lowTemp.textContent = `Low: ${someObject.week[0].mintemp_f}`;
-      feelsLike.textContent = `Feels like ${someObject.week[0].feelslike_f}`;
+      temp.textContent = Math.ceil(someObject.week[0].temp_f);
+      highTemp.textContent = `High: ${Math.ceil(someObject.week[0].maxtemp_f)}`;
+      lowTemp.textContent = `Low: ${Math.ceil(someObject.week[0].mintemp_f)}`;
+      feelsLike.textContent = `Feels like ${Math.ceil(someObject.week[0].feelslike_f)}`;
     } else if (config.unitOfMeasurement === 'celsius') {
-      temp.textContent = someObject.week[0].temp_c;
-      highTemp.textContent = someObject.week[0].maxtemp_c;
-      lowTemp.textContent = someObject.week[0].mintemp_c;
-      feelsLike.textContent = someObject.week[0].feelslike_c;
+      temp.textContent = Math.ceil(someObject.week[0].temp_c);
+      highTemp.textContent = `High: ${Math.ceil(someObject.week[0].maxtemp_c)}`;
+      lowTemp.textContent = `Low: ${Math.ceil(someObject.week[0].mintemp_c)}`;
+      feelsLike.textContent = `Feels like ${Math.ceil(someObject.week[0].feelslike_c)}`;
     }
   }
 
@@ -83,6 +83,25 @@ const dom = (() => {
     const iconName = boolean ? imageMap[code].day.icon : imageMap[code].night.icon
 
     return iconName;
+  }
+
+  const getBannerName = (boolean, code) => {
+    const bannerFolder = boolean ? imageMap[code].day.banner_folder : imageMap[code].night.banner_folder
+
+    return bannerFolder;
+  }
+
+  const renderBanner = (someObject) => {
+    const bannerPath = getBannerName(someObject.isDay, someObject.week[0].code);
+    const bannerDiv = document.createElement('div');
+    const bannerImg = document.createElement('img');
+
+    bannerDiv.classList.add('panel', 'banner');
+    bannerDiv.appendChild(bannerImg);
+
+    bannerImg.src = lazyLoad.getBanner(bannerPath);
+
+    container.appendChild(bannerDiv);
   }
 
   const renderHour = () => {
@@ -112,17 +131,17 @@ const dom = (() => {
       const timeDiv = currentHourDiv.getElementsByClassName('time-in-hour')[0];
 
       if (config.unitOfMeasurement === 'fahrenheit') {
-        tempDiv.innerText = someHourObject.temp_f;
+        tempDiv.innerText = Math.ceil(someHourObject.temp_f);
       } else if (config.unitOfMeasurement === 'celsius') {
-        tempDiv.innerText = someHourObject.temp_c;
+        tempDiv.innerText = Math.ceil(someHourObject.temp_c);
       }
 
       const isCurrentHourDaytime = weather.isDaytime(someHourObject.time_epoch);
 
       const iconName = getIconName(isCurrentHourDaytime, someHourObject.code)
-      lazyLoadImage(iconName, iconDiv);
+      lazyLoad.getImage(iconName, iconDiv);
 
-      timeDiv.innerText = weather.epochToEST(someHourObject.time_epoch);
+      timeDiv.innerText = i === 0 ? 'Now' : weather.epochTo12Hour(someHourObject.time_epoch);
     }
   }
 
@@ -131,6 +150,7 @@ const dom = (() => {
     renderLocationBar,
     resetDOM,
     renderNow,
+    renderBanner,
     renderHourly,
   }
 })();

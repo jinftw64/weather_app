@@ -115,6 +115,19 @@ const weather = (() => {
     return (hours > 6 && hours < 20);
   }
 
+  const epochTo12Hour = (epoch) => {
+    const date = new Date(epoch * 1000);
+    let hours = date.getHours();
+    const amOrPm = hours >= 12 ? 'PM' : 'AM';
+
+    hours = hours % 12;
+    hours = hours ? hours : 12;
+
+    const timeString = hours + ' ' + amOrPm;
+
+    return timeString;
+  }
+
   const getWeather = async () => {
     const response = await getResponseJson();
 
@@ -124,6 +137,7 @@ const weather = (() => {
   return {
     getWeather,
     epochToEST,
+    epochTo12Hour,
     isDaytime,
   }
 })();

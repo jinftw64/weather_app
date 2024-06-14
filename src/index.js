@@ -1,4 +1,3 @@
-import weather from './weather.js';
 import dom from './dom.js';
 import handlers from './handlers.js';
 
