@@ -99,7 +99,7 @@ const dom = (() => {
     bannerDiv.classList.add('panel', 'banner');
     bannerDiv.appendChild(bannerImg);
 
-    bannerImg.src = lazyLoad.getBanner(bannerPath);
+    bannerImg.src = `./src/banners/${bannerPath}/${lazyLoad.getBanner(bannerPath)}`;
 
     container.appendChild(bannerDiv);
   }

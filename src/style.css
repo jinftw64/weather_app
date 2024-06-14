@@ -1,5 +1,6 @@
 .container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100vh;
@@ -8,4 +9,8 @@
 
 form.zip-code-form>div {
   padding-bottom: 10px;
+}
+
+.banner img {
+  max-height: 200px;
 }
