@@ -27,6 +27,7 @@ const handlers = (() => {
       console.log(weatherData.week[0].hours)
       dom.renderBanner(weatherData);
       dom.renderHourly(weatherData.week[0].hours)
+      dom.renderWeek(weatherData);
     })
   }
 

@@ -18,7 +18,6 @@ const lazyLoad = (() => {
       const imagesMap = {};
 
       images.keys().forEach((key) => {
-        // Extract subfolder and filename from the path
         const pathParts = key.split('/');
         const subfolder = pathParts[1];
         const filename = pathParts.slice(2).join('/');
@@ -39,7 +38,6 @@ const lazyLoad = (() => {
       const subImages = imagesMap[subfolder];
       if (subImages && subImages.length > 0) {
         const randomIndex = Math.floor(Math.random() * subImages.length);
-        console.log(subImages[randomIndex]);
         return subImages[randomIndex];
       }
       return null;

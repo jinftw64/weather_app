@@ -7,7 +7,10 @@ import lazyLoad from './lazyLoadImage.js';
 import formTemplate from './templates/form.html';
 import locationBar from './templates/location-bar.html'
 import now from './templates/now.html';
+import hourlyHTML from './templates/hourly.html';
 import hourHTML from './templates/hour.html';
+import dayHTML from './templates/day.html';
+import weekHTML from './templates/week.html';
 import './style.css';
 
 const dom = (() => {
@@ -117,14 +120,17 @@ const dom = (() => {
     const hourlyDiv = document.createElement('div');
 
     hourlyDiv.classList.add('panel', 'hourly');
+    hourlyDiv.innerHTML = hourlyHTML;
 
     container.appendChild(hourlyDiv);
+
+    const hoursDiv = document.querySelector('.hours');
 
     for (let i = 0; i < someHourArray.length; i++) {
       const someHourObject = someHourArray[i];
       const currentHourDiv = renderHour();
 
-      hourlyDiv.appendChild(currentHourDiv);
+      hoursDiv.appendChild(currentHourDiv);
 
       const tempDiv = currentHourDiv.getElementsByClassName('temp')[0];
       const iconDiv = currentHourDiv.getElementsByClassName('icon')[0];
@@ -145,6 +151,53 @@ const dom = (() => {
     }
   }
 
+  const renderDay = (someDayObject, index) => {
+    const dayDiv = document.createElement('div');
+
+    dayDiv.classList.add('day', `day-${index}`);
+    dayDiv.innerHTML = dayHTML;
+
+    const nameOfDayDiv = dayDiv.getElementsByClassName('name-of-day')[0];
+    const iconDiv = dayDiv.getElementsByClassName('icon')[0];
+    let highTemp = '';
+    let lowTemp = '';
+    const highLowDiv = dayDiv.getElementsByClassName('high-and-low')[0];
+
+    nameOfDayDiv.innerText = weather.epochToDayNum(someDayObject.date_epoch);
+
+    const iconName = getIconName(true, someDayObject.code)
+    lazyLoad.getImage(iconName, iconDiv);
+
+    if (config.unitOfMeasurement === 'fahrenheit') {
+      highTemp = Math.ceil(someDayObject.maxtemp_f)
+      lowTemp = Math.ceil(someDayObject.mintemp_f)
+    } else if (config.unitOfMeasurement === 'celsius') {
+      highTemp = Math.ceil(someDayObject.maxtemp_c)
+      lowTemp = Math.ceil(someDayObject.mintemp_c)
+    }
+
+    highLowDiv.innerText = `${highTemp} / ${lowTemp}`;
+
+    return dayDiv;
+  }
+
+  const renderWeek = (someObject) => {
+    const week = document.createElement('div');
+
+    week.classList.add('panel', 'week');
+    week.innerHTML = weekHTML;
+
+    container.appendChild(week);
+
+    for (const index in someObject.week) {
+      const currentDay = renderDay(someObject.week[index], index);
+
+      week.appendChild(currentDay);
+    }
+
+    container.appendChild(week);
+  }
+
   return {
     renderForm,
     renderLocationBar,
@@ -152,6 +205,7 @@ const dom = (() => {
     renderNow,
     renderBanner,
     renderHourly,
+    renderWeek,
   }
 })();
 

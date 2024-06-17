@@ -22,7 +22,7 @@ const weather = (() => {
   // current day requires different deserialization vs forecast day
   const createNow = (someObject) => {
     const now = {
-      date: someObject.current.last_updated,
+      date_epoch: someObject.current.last_updated_epoch,
       temp_c: someObject.current.temp_c,
       temp_f: someObject.current.temp_f,
       feelslike_c: someObject.current.feelslike_c,
@@ -41,7 +41,7 @@ const weather = (() => {
 
   const createDay = (someObject) => {
     const day = {
-      date: someObject.date,
+      date_epoch: someObject.date_epoch + 18000,
       maxtemp_c: someObject.day.maxtemp_c,
       maxtemp_f: someObject.day.maxtemp_f,
       mintemp_c: someObject.day.mintemp_c,
@@ -81,6 +81,17 @@ const weather = (() => {
     }
 
     return allHours;
+  }
+
+  const epochToDayNum = (epoch) => {
+    const nameOfDays = [
+      'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
+    ]
+
+    console.log((epoch) * 1000)
+    const index = new Date(epoch * 1000).getDay();
+
+    return nameOfDays[index];
   }
 
   const processJson = (someJson) => {
@@ -138,6 +149,7 @@ const weather = (() => {
     getWeather,
     epochToEST,
     epochTo12Hour,
+    epochToDayNum,
     isDaytime,
   }
 })();
