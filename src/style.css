@@ -1,3 +1,7 @@
+body {
+  font-family: Verdana, sans-serif;
+}
+
 .container {
   display: flex;
   flex-direction: column;
@@ -5,6 +9,7 @@
   align-items: center;
   height: 100vh;
   width: 100vw;
+  background-color: #F0FFFF;
 }
 
 form.zip-code-form>div {
@@ -13,4 +18,40 @@ form.zip-code-form>div {
 
 .banner img {
   max-height: 200px;
+}
+
+#location {
+  font-size: 1.5em;
+  border: none;
+  border-radius: 20px;
+  height: 2rem;
+}
+
+h1 {
+  font-weight: 550;
+}
+
+.now {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 2fr;
+  width: 800px;
+}
+
+.now .top {
+  grid-column: 1 / span 2;
+  grid-row: 1;
+  width: 100%;
+}
+
+.now .left {
+  grid-column: 1;
+  grid-row: 2;
+  width: 100%;
+}
+
+.now .right {
+  grid-column: 2;
+  grid-row: 2;
+  width: 100%;
 }
