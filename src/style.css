@@ -50,10 +50,32 @@ h1 {
   width: 100%;
 }
 
+.now .left .large {
+  display: flex;
+  height: 120px;
+  font-size: 120px;
+  align-items: center;
+}
+
+.now .left .large .icon {
+  height: 100%;
+  width: auto;
+}
+
+.now .left .high-low {
+  display: flex;
+  font-size: 1.5rem;
+  justify-content: space-between;
+  width: 250px;
+}
+
 .now .right {
   grid-column: 2;
   grid-row: 2;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
 }
 
 .hourly {
@@ -69,10 +91,14 @@ h1 {
 
 .hourly .hours {
   display: flex;
+  justify-content: space-between;
 }
 
 .hour {
-  width: 100px;
+  display: flex;
+  flex-direction: column;
+  width: 70px;
+  align-items: center;
 }
 
 .week {
@@ -85,4 +111,37 @@ h1 {
 .week .top {
   grid-column: 1;
   grid-row: 1;
+}
+
+.week .days {
+  grid-column: 1;
+  grid-row: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.week .day {
+  display: flex;
+  align-items: center;
+  height: 70px;
+  justify-content: space-between;
+}
+
+.day .icon-and-temps {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+  min-width: 200px;
+}
+
+.hourly img.icon {
+  height: auto;
+  width: 100%;
+}
+
+.week img.icon {
+  height: 100%;
+  width: auto;
 }

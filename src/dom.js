@@ -180,18 +180,20 @@ const dom = (() => {
 
   const renderWeek = (someObject) => {
     const week = document.createElement('div');
+    const days = document.createElement('div');
 
     week.classList.add('panel', 'week');
     week.innerHTML = weekHTML;
 
-    container.appendChild(week);
+    days.classList.add('days');
 
     for (const index in someObject.week) {
       const currentDay = renderDay(someObject.week[index], index);
 
-      week.appendChild(currentDay);
+      days.appendChild(currentDay);
     }
 
+    week.appendChild(days);
     container.appendChild(week);
   }
 
