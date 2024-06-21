@@ -1,8 +1,7 @@
 import config from './config.js';
 import weather from './weather.js';
 import handlers from './handlers.js';
-import imageMap from './imageMap.js';
-import lazyLoad from './lazyLoadImage.js';
+import imageLoad from './imageLoad.js';
 
 import formTemplate from './templates/form.html';
 import locationBar from './templates/location-bar.html'
@@ -63,8 +62,7 @@ const dom = (() => {
     const icon = document.querySelector('.now .icon');
 
     // lookup code and render icon
-    const iconName = getIconName(someObject.isDay, someObject.week[0].code)
-    lazyLoad.getImage(iconName, icon);
+    icon.src = imageLoad.renderIcon(someObject.isDay, someObject.week[0].code);
 
     // set api response values to elements
     condition.textContent = someObject.week[0].condition;
@@ -89,7 +87,7 @@ const dom = (() => {
   }
 
   const getBannerName = (boolean, code) => {
-    const bannerFolder = boolean ? imageMap[code].day.banner_folder : imageMap[code].night.banner_folder
+    const bannerFolder = boolean ? imageLoad.imageMap[code].day.banner_folder : imageLoad.imageMap[code].night.banner_folder
 
     return bannerFolder;
   }
@@ -98,11 +96,12 @@ const dom = (() => {
     const bannerPath = getBannerName(someObject.isDay, someObject.week[0].code);
     const bannerDiv = document.createElement('div');
     const bannerImg = document.createElement('img');
+    const folderContext = imageLoad.folderContexts[bannerPath];
 
     bannerDiv.classList.add('panel', 'banner');
     bannerDiv.appendChild(bannerImg);
 
-    bannerImg.src = `./src/banners/${bannerPath}/${lazyLoad.getBanner(bannerPath)}`;
+    bannerImg.src = imageLoad.getRandomImage(folderContext);
 
     container.appendChild(bannerDiv);
   }
@@ -144,8 +143,7 @@ const dom = (() => {
 
       const isCurrentHourDaytime = weather.isDaytime(someHourObject.time_epoch);
 
-      const iconName = getIconName(isCurrentHourDaytime, someHourObject.code)
-      lazyLoad.getImage(iconName, iconDiv);
+      iconDiv.src = imageLoad.renderIcon(isCurrentHourDaytime, someHourObject.code);
 
       timeDiv.innerText = i === 0 ? 'Now' : weather.epochTo12Hour(someHourObject.time_epoch);
     }
@@ -165,8 +163,7 @@ const dom = (() => {
 
     nameOfDayDiv.innerText = weather.epochToDayNum(someDayObject.date_epoch);
 
-    const iconName = getIconName(true, someDayObject.code)
-    lazyLoad.getImage(iconName, iconDiv);
+    iconDiv.src = imageLoad.renderIcon(true, someDayObject.code);
 
     if (config.unitOfMeasurement === 'fahrenheit') {
       highTemp = Math.ceil(someDayObject.maxtemp_f)
