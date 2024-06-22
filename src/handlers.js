@@ -4,6 +4,7 @@ import dom from "./dom";
 
 const handlers = (() => {
   const setForm = () => {
+    const container = document.querySelector('.container');
     const renderedForm = document.querySelector('form.zip-code-form');
     const zipField = document.querySelector('#zip');
 
@@ -15,7 +16,9 @@ const handlers = (() => {
       config.zipCode = zipField.value;
       config.unitOfMeasurement = unitOfMeasurement.value;
 
+      container.textContent = 'Loading';
       const weatherData = await weather.getWeather();
+      container.textContent = '';
 
       // test code
       console.log(weatherData);
@@ -24,7 +27,6 @@ const handlers = (() => {
       dom.resetDOM();
       dom.renderLocationBar(weatherData);
       dom.renderNow(weatherData);
-      console.log(weatherData.week[0].hours)
       dom.renderBanner(weatherData);
       dom.renderHourly(weatherData.week[0].hours)
       dom.renderWeek(weatherData);

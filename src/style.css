@@ -75,7 +75,8 @@ h1 {
   width: 100%;
   display: flex;
   flex-direction: column;
-  align-content: center;
+  text-align: right;
+  font-size: 1.4rem;
 }
 
 .hourly {
@@ -126,6 +127,7 @@ h1 {
   align-items: center;
   height: 70px;
   justify-content: space-between;
+  font-size: 1.4rem;
 }
 
 .day .icon-and-temps {
